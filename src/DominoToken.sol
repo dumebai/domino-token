@@ -56,7 +56,7 @@ contract DominoToken is ERC20, Ownable, AccessControl {
      * @dev The interest rate can only decrease.
      */
     function setInterestRate(uint256 _newInterestRate) external onlyOwner {
-        if (_newInterestRate < s_interestRate) {
+        if (_newInterestRate > s_interestRate) {
             revert DominoToken__InterestRateCanOnlyDecrease();
         }
         // Set the interest rate
@@ -173,7 +173,7 @@ contract DominoToken is ERC20, Ownable, AccessControl {
         // Linear growth with time.
 
         // 1. Calculate the time since the last update.
-        uint256 timeElapsed = block.timestamp + s_userLastUpdatedTimestamp[_user];
+        uint256 timeElapsed = block.timestamp - s_userLastUpdatedTimestamp[_user];
         // 2. Calculate the amount of linear growth.
         // principal amount(1 + (user interest rate * time elapsed))
         // deposit: 10 tokens
